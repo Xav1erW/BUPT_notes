@@ -3,7 +3,7 @@ BUPT上课笔记
 
 ## 说明
 
-受到[[Gilles Castel](https://github.com/gillescastel) ]启发，从这学期开始用LaTeX整理数学笔记，也是练习LaTeX的使用。
+受到[Gilles Castel](https://github.com/gillescastel)启发，从这学期开始用LaTeX整理数学笔记，也是练习LaTeX的使用。
 
 各种原因，没有开放笔记的源代码，只分享pdf文件
 
