@@ -268,7 +268,7 @@ graph LR
   \bigcup_{i \in I} A_i = A
   $$
 
-* 对于划分，每个等价类组成新的集合称为A关于R的 **商集(quotient set)** ，记作 $A/R$
+* 对于划分，每个等价类组成新的集合称为A关于R的 **商集(quotient set)** ，记作 $A/R$  （所有等价类的集合）
 * 商集元素个数(A在R下等价类的个数) 称为R的**秩(rank)**
 
 * R是定义在集合S上的等价关系，那么R的等价类构成S的划分，反过来，给定集合S的划分$\{A_i|i\in I\}$，则存在一个等价关系，依集合$A_i (i \in I)$ 作为它的等价类
@@ -278,15 +278,20 @@ graph LR
 * **Partial Ordering（Partial Order）** 定义在集合$S$ 上的关系$R$ 如果是自反、反对称、传递的，就称为偏序；集合$S$ 和定义在其上的偏序$R$ 一起称为偏序集（**partially ordered set, or poset**），记作$(S,R)$ 集合$S$ 中的元素称为偏序集的元素。
 
 * 在一个偏序集中，使用$a \preceq b$ 表示$(a,b)\in R$，其中$\preceq$ 表示任意偏序关系，不仅仅是小于等于，记号$\prec$ 表示$a \preceq b$ 但 $a \neq b$
+
 * 偏序集中，不一定所有的元素都有$a \preceq b$ 或 $b \preceq a$ 有可能两元素没有关系，因此，如果偏序集$(S,\preceq)$中元素$a \preceq b$ 或$ b \preceq a$ 称$a、b$ 是可比的（**comparable**），相反，如果没有$a \preceq b$ 也没有$ b \preceq a$ 称$a、b$ 是不可比的（**incomparable**）
 
 * 如果偏序集中每对元素都是可比的，称 $S$ 为全序集（**totally ordered** or **linearly ordered set**），$\preceq$ 称为全序或线序（ **total order** or **a linear order**）一个全序集也称为链(**chain**)
 
 * 对于偏序集$(S,\preceq)$ 如果$\preceq$ 是全序，并且对于$S$ 每个非空子集都有一个最小元素，称其为良序集（**well-ordered set**）
 
+* 全序集不一定是良序集，如实数的开区间： $(a,b)$
+
 * **良序归纳原理(THE PRINCIPLE OF WELL-ORDERED INDUCTION)** ：假设$S$ 是一个良序集，那么$P(x)\quad \forall x \in S$ 如果满足：
 
-  *INDUCTIVE STEP:* $\forall y \in S$， $\forall x \in S$ 满足$x \prec y$ 时$P(x)$ 为真，那么$P(y)$ 为真
+  *INDUCTIVE STEP:* $\forall y \in S$ ，如果 $\forall x \in S$ 满足$x \prec y$ 时$P(x)$ 为真，那么 $P(y)$ 为真
+  
+  这个结论很显然，因为对于最小元素$x_0$，没有比它小的，利用假设和空证明可以证明 $\forall x \prec x_0 \ P(x)$ 为真，那么最小元素 $P(x_0)$ 为真，那么所有都为真
 
 #### Lexicographic Order
 
@@ -694,7 +699,7 @@ $$
 * D、E是布尔矩阵，定义**模2的布尔积$D*E$ (mod-2 Boolean product $D*E$ \)** ：按照矩阵乘法，把乘换成运算$\cdot$
 * 分配性质： $(D\oplus E)*F = (D*F)\oplus(E*F) $
 * 现在把$x\in B^n$ 看成矩阵 $\begin{pmatrix}  x_1 & x_2 & \cdots & x_n \end{pmatrix}$ 
-  * **定理**  设m和n是非负整数且$m<n,r=n-m$，H是一个$n\times r$布尔矩阵，那么函数$f:B^n \to B^m$ 定义为： $f_H(x) = x *H \quad x \in B^n $ 是群 $B^n$ 到$B^n$ 的一个同态
+  * **定理**  设m和n是非负整数且$m<n,r=n-m$，H是一个$n\times r$布尔矩阵，那么函数$f:B^n \to B^r$ 定义为： $f_H(x) = x *H \quad x \in B^n $ 是群 $B^n$ 到$B^r$ 的一个同态
   * 设 $m,n,r,H$ 和$f_H$，如以上定理所定义，那么 $N = \{x\in B^n| x*H=\overline 0 \}$ ($\overline 0)$ 单位元) 是 $B^n$ 的一个正规子群
   * N是同态$f_H$ 的核
 
@@ -755,13 +760,13 @@ $$
 
 首先第一行写N的所有元素： $\overline 0 \quad x^{(2)} \cdot x^{(2^m)} $ 该行的陪集首部为$\overline 0$
 
-第二行选择任意不在第一行的$B^n$ 中的元素y，把陪集 $y\oplus N$ 作为第二行，选择集合中权最小的作为陪集首部（最小的有多个选任意即可）；同时我们知道 $\epsilon^{(2)} \oplus N= y \oplus N$ 这意味着第二行每个字可以被写为 $\epsilon^{(2)} \oplus v ,\ v\in N $，于是第二行可写为： $\epsilon^{(2)} \quad \epsilon^{(2)} \oplus x^{(2)} \quad \quad \epsilon^{(2)} \oplus x^{(3)} \cdots \quad \quad \epsilon^{(2)} \oplus x^{(2^m)}$ 
+第二行选择任意不在第一行的$B^n$ 中的元素y，把陪集 $y\oplus N$ 作为第二行，选择集合中权最小的作为陪集首部（最小的有多个选任意即可）；同时我们知道 $\epsilon^{(2)} \oplus N= y \oplus N$ ，第二行所有元素都在一个等价类内，这意味着第二行每个字可以被写为 $\epsilon^{(2)} \oplus v ,\ v\in N $，（$\epsilon^{(2)}$ 表示第二行的陪集首部）于是第二行可写为： $\epsilon^{(2)} \quad \epsilon^{(2)} \oplus x^{(2)} \quad \quad \epsilon^{(2)} \oplus x^{(3)} \cdots \quad \quad \epsilon^{(2)} \oplus x^{(2^m)}$ 
 
 其他行同理
 
 * 假设群码是 $e_H:B^m \to B^n $ H是奇偶校验矩阵，此时可以简化上述译码方法
 * 如果 $m,n,r,H$ 和$f_H$ 与之前定义一样，那么 $f_H$ 是满射
-* $B^r$ 和 $B^n/N$ 是同构的，其中 $N = \text{ker}(f_H) = e_H(B^m) $ 同构映射定义为
+* $B^r$ 和 $B^n/N$ （商群说明：正规子群陪集可构成一个划分，因此可据此构造商群）是同构的，其中 $N = \text{ker}(f_H) = e_H(B^m) $ 同构映射定义为
 $$
 g(xN) = f_H(x) = x*H
 $$
