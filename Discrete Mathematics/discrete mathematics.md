@@ -46,6 +46,20 @@
       - [Solving Linear Homogeneous Recurrence Relations with Constant Coefficients](#solving-linear-homogeneous-recurrence-relations-with-constant-coefficients)
       - [Linear Nonhomogeneous Recurrence Relations with Constant Coefficients](#linear-nonhomogeneous-recurrence-relations-with-constant-coefficients)
       - [Divide-and-Conquer Algorithms and Recurrence Relations](#divide-and-conquer-algorithms-and-recurrence-relations)
+  - [Graphs](#graphs)
+    - [Graphs and Graph Models](#graphs-and-graph-models)
+      - [Graph Models](#graph-models)
+    - [Graph Terminology and Special Types of Graphs](#graph-terminology-and-special-types-of-graphs)
+      - [Basic Terminology](#basic-terminology)
+      - [Some Special Simple Graphs](#some-special-simple-graphs)
+      - [Bipartite Graphs 二分图](#bipartite-graphs-二分图)
+      - [Bipartite Graphs and Matchings](#bipartite-graphs-and-matchings)
+      - [New Graphs from Old](#new-graphs-from-old)
+    - [Representing Graphs and Graph Isomorphism](#representing-graphs-and-graph-isomorphism)
+      - [Isomorphism of Graphs](#isomorphism-of-graphs)
+    - [Connectivity](#connectivity)
+    - [Planar Graphs 平面图](#planar-graphs-平面图)
+    - [Graph Coloring 图着色](#graph-coloring-图着色)
   - [附加](#附加)
     - [Permutation(置换函数)](#permutation置换函数)
       - [偶置换与奇置换](#偶置换与奇置换)
@@ -904,6 +918,140 @@ f(n) \left\{
 \end{aligned}
 \right.
 $$
+
+## Graphs
+### Graphs and Graph Models
+* **infinite graph  无限图**
+* **finite graph  有限图**
+* 每条边都连接两个不同的顶点且没有两条不同的边连接一对相同顶点的图称为**简单图 simple graph**。
+* 可能会有**多重边  multiple edges**连接同一对顶点的图称为**多重图  multigraphs**。
+* 把一个顶点连接到它自身的边。这样的边称为**环  loops**
+* 包含环或存在多重边连接同一对顶点或同一个顶点的图，称为**伪图  pseudographs**。
+* 可以用包含从一个顶点指向第二个（也许是同一个）顶点的**多重有向边  multiple directed edges**的有向图来对这样的网络建模，我们称这样的图为**有向多重图  directed multigraphs**。当m条有向边中的每一条都与顶点有序对(u，v)相关联时，我们称(u，v)**多重度  multiplicity**为m。
+* **混合图  mixed graph**  既包含有向边又包含无向边的图
+
+| Type  | Edges  |  Multiple Edge Allowed? | Loops Allowed?  |
+|---|---|---|---|
+| Simple Graph  | Undirected  | No  | No  |
+| Multigraph  | Undirected  | Yes  | No  |
+| Pseudograph  | Undirected  | Yes  | Yes  |
+| Simple Directed Graph  | Directed  | No  | No  |
+| Directed Multigraph  | Directed  | Yes  | Yes  |
+| Mixed Graph  | Directed and Undirected  |Yes   | Yes  |
+
+#### Graph Models
+* Acquaintanceship and Friendship Graphs
+* Influence Graphs  影响图，有向图，表示谁影响了谁
+* Collaboration Graphs  合作图，表示两者工作存在某些关联，如academic collaboration graph 连接的两者表示两者共同发表过论文
+* Call Graphs  呼叫图，有向多重图，表示不同电话号码之间的呼叫
+* The Web Graph  网络图，有向图，由网页a指向网页b的链接，那么图中就有a指向b的边
+* Citation Graphs  引用图，不包含环和多重边的有向图，边指向被引用文本
+* Module Dependency Graphs  模块依赖图，表示不同模块的依赖关系，如`main -> protocol` `main`模块依赖`protocol`模块
+* Precedence Graphs and Concurrent Processing  优先图与并发处理：用顶点表示每个语句，若在执行完第一个顶点所表示的语句之前不能执行第二个顶点所表示的语句，则从第一个顶点到第二个顶点有一条边。这样的图称为优先图。
+* Airline Routes  航线图：用有向边表示航班，该边从表示出发机场的顶点指向表示目的机场的顶点，多重有向图
+* Road Networks  道路网：可以用图对道路网建模。在这样的模型中，顶点表示交叉点，而边表示路。如果所有的道路都是双向的，最多有一条道路连接两个交叉点，那么可以用一个简单无向图来表示道路网。然而，我们经常要为存在单行道且两个交又点间存在多条道路的道路网建模。为了构建这样的模型，我们用无向边表示双向的道路，用有向边表示单行道。多重无向边表示连接两个相同交叉点的多条双向道路。多重有向边表示从一个交叉点开始到第二个交叉点结束的多条单行道；环表示环形路。描述包含单行道和双向道路的道路网需要混合图。
+* Niche Overlap Graphs in Ecology  生态学中栖息地重叠图
+* Protein Interaction Graphs  蛋白质相互作用图
+* Round-Robin Tournaments  循环赛，如果a击败b那么a指向b `a -> b`
+* Single-Elimination Tournaments   单淘汰赛
+
+### Graph Terminology and Special Types of Graphs
+#### Basic Terminology
+* **adjacent(neighbors)**  邻接（邻居）
+* **incident with**   e**关联**顶点u、v
+* **connect**  连接，同上
+* 与顶点v所有相邻点的集合 $N(v)$ ,如果A是V的子集，那么 $N(A) = \bigcup_{v\in A} N(v)$
+* 顶点的**度  degree**
+* 度为0，**孤立的  isolated**；度为1，**悬挂的  pendant**
+* 无向图有m个边，那么 $2m = \sum_{v\in V} \text{deg}(v) $
+* 无向图有偶数个度为奇数的顶点
+* 有向图，有$(u,v)$ 称u邻接到v  adjacent to；v从u邻接 adjacent from；u为**起点initial vertex**；v为**终点 terminal or en vertex**
+* 入度  in-degree $\text{deg}^-$；出度 out-degree $\text{deg}^+$
+* 
+$$
+\sum_{v \in V} \text{deg}^-(v) = \sum_{v \in V} \text{deg}^+(v) = |E|
+$$
+* 忽略掉方向得到的无向图称为**基本无向图  underlying undirected graph**
+
+#### Some Special Simple Graphs
+* **完全图  Complete Graphs**： $K_n$ 每个顶点都与其他相连，无向图
+* **圈图  Cycles**： $C_n$ 围成一圈 $\{v_1，v_2\}, \{v_2，v_3\},\cdots ,\{v_n，v_1\}$ 组成
+* **轮图  Wheel**： $W_n$ n代表形成轮图的圈图的顶点数。给圈图加一个顶点，该顶点与其他所有相连
+* **n立方体图  n-Cubes** ： $Q_n$ 用$2^n$bit 长度为$n$的串表示顶点，相邻顶点只有一位不同
+![](figs/nCubes.jpg)
+
+#### Bipartite Graphs 二分图
+* 若把简单图G的顶点集分成两个不相交的非空集合$V_1$和$V_2$，使得图中的每一条边都连接$V_1$；中的一个顶点与$V_2$中的一个顶点（因此G中没有边连接$V_1$，中的两个顶点或$V_2$。中的两个顶点），则G称为二分图。当此条件成立时，称$(V_1，V_2)$为G的顶点集的一个二部划分。
+* Complete Bipartite Graphs  完全二分图：二分图能连的都连上 $K_{m,n}$
+
+
+#### Bipartite Graphs and Matchings
+* 匹配 matching M
+* unmatched  未匹配的
+* maximum matching  最大匹配：能匹配的匹配了
+* complete matching  完全匹配，$|V_1|$每个顶点都匹配 $|M| = |V_1|$，称$V_1$ 到 $V_2$ 的完全匹配
+* 完全匹配充要条件： $V_1$ 到 $V_2$ 的完全匹配，当且仅当 $\forall A \subset V_1 s.t. |N(A)| \geq |A|$
+
+#### New Graphs from Old
+* **子集导出的子图 subgraph induced by subset**，当且仅当边的两顶点都在子集中
+* **edge contraction  边的收缩**：有边的两点缩一块去，不是子图 `a -> b -> c` 变为 `a -> d` 其中b、c收缩了
+* 图的并集：边和顶点都并一块 $G_1 \cup G_2$
+
+
+### Representing Graphs and Graph Isomorphism
+* **同构 isomorphic**：有时，两个图具有完全相同的形式，从某种意义上就是两个图的顶点之间存在着一一对应，这个对应保持边的对应关系。在这种情形下，就说这两个图是同构的。
+* **邻接表  adjacency lists**：表示不带多重边的图，列出顶点和它相邻的顶点
+* **邻接矩阵  adjacency matrix**  $A$ 或 $A_G$ ，如果有多重边，就不是0-1矩阵了，数字代表多重度
+*  **稀疏矩阵  sparse matrix**
+* **稠密的  dense**
+* **关联矩阵  incidence matrices**：行代表顶点，列代表边， $m_{ij} = 0$ 代表边$e_j$ 关联顶点 $v_i$ 否则为0
+  
+#### Isomorphism of Graphs
+* 设$G_1=(V_1，E_1)$和$G_2=(V_2，E_2)$是简单图，若存在一对一的和映上的从$V_1$，到$V_2$的函数f，且f具有这样的性质：对$V_1$中所有的a和b来说，a和b在$G_1$中相邻当且仅当$f(a)$和$f(b)$在$G_2$中相邻，则称$G_1$与$G_2$是同构的。这样的函数f称为同构。两个不同构的简单图称为非同构的。
+* 证明同构：如果能找到一个属性，两个图中只有一个图具有这个属性，就可说明两图不同构，该属性称为**图形不变量  graph invariant**
+
+### Connectivity
+* **通路  path**：长度为经过边的个数
+* **回路  circuit**：哪开始哪结束，长度不为0
+* 若无向图中每一对不同的顶点之间都有通路，则该图称为**连通的  connected**。不连通的无向图称为**不连通的  not connected or disconnect**。当从图中删除顶点或边，或两者时，得到了不连通的子图，就称将图变成不连通的。
+* **连通分支  connected component**图G的连通分支是G的连通子图，且该子图不是图G的另一个连通子图的真子图。也就是说，图G的连通分支是G的一个极大连通子图。
+* 有时删除图中的一个顶点和它所关联的边，就产生比原图更多的连通分支的子图。把这样的顶点称为**割点（或关节点）  cut vertices (or articulation points)**。从连通图里删除割点，就产生不连通的子图。同理，如果删除一条边，就产生比原图更多连通分支的子图，这条边就称为**割边或桥  cut edge or bridge**。
+* 不含割点的连通图称为**不可分割图  nonseparable graphs**
+* 若$G-V'$是不连通的，则称$G=(V，E)$的顶点集$V$的子集$V'$是**点割集，或分割集  vertex cut, or separating set**。
+* 除了完全图以外，每一个连通图都有一个点割集。我们定义非完全图的**点连通度  vertex connectivity**为点割集中最小的顶点数，记作 $\kappa(G)$ 。
+* 当G是完全图时，它没有点割集，因为删除它顶点集合的任意子集及其所有相关联的边后它仍然是一个完全图。同时，当G是完全图时，我们不能把$\kappa(G)$定义为点割集的最小顶点数。我们用$\kappa(G)=n-1$来替代，这是需要删除的顶点数，以便得到只含有一个顶点的图
+* $\kappa(G) \geq k$ 称图为**k连通的  k-connected (or k-vertex-connected)**
+* 若图是不可分割的且至少含有3个顶点，则称该图为**2连通  2-connected**的或**双连通的  biconnected**。
+* **边割集  edge cut**。图G的**边连通度  edge connectivity**，记作$\lambda (G)$
+* 
+$$
+\kappa(G) \leq \lambda(G) \leq \min_{v \in V} \text{deg}(v)
+$$
+
+* 若对于有向图中的任意顶点a和b，都有从a到b和从b到a的通路，则该图是**强连通的  strongly connected**。
+* 若在有向图的基本无向图中，任何两个顶点之间都有通路，则该有向图是**弱连通的  weakly connected**。
+* 设G是一个图，该图的邻接矩阵A相对于图中的顶点顺序$v_1,v_2,\cdots,v_n$。（允许带有无向或有向边、带有多重边和环）。从$v_i$到$v_j$，长度为r的不同通路的数目等于$A^r$的第$(i，j)$项，其中r是正整数。
+
+
+### Planar Graphs 平面图
+* **planar representation  平面图的表示**，画出图没有交叉的图
+* **面 region**
+* 欧拉公式，简单平面中 $r = e - v + 2$   $r$ 为面的个数，包含最外侧没有边界的面
+* 简单平面图， $v \geq 3$ 有 $e \leq 3 v - 6$   可用来证明某些图不是平面图
+* 若G是简单平面图，G中有度不超过5的顶点
+* 简单平面图， $v \geq 3$ 有 $e \leq 3 v - 6$ 如果没有长度为3的回路，那么 $e \leq 2v-4$
+* **初等细分 elementary subdivision**，平面图在边里插入一个点，还是平面图，这样操作称为初等细分
+* 得到的图和之前的图称为**同胚的 homeomorphic**
+* 一个图是非平面图当且仅当它包含一个同胚于 $K_{3,3}$ 或 $K_5$ 的子图
+
+### Graph Coloring 图着色
+* dual graph  对偶图，地图对应的图
+* 图的着色数记作 $\chi (G)$
+* 平面图的着色不超过4
+* 完全图的着色 $\chi(K_n) = n$
+* 完全二分图着色数为2
+* 
+
 ## 附加
 
 ### Permutation(置换函数)
