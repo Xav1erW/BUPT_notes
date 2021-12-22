@@ -306,7 +306,7 @@ graph LR
 
 * **良序归纳原理(THE PRINCIPLE OF WELL-ORDERED INDUCTION)** ：假设$S$ 是一个良序集，那么$P(x)\quad \forall x \in S$ 如果满足：
 
-  *INDUCTIVE STEP:* $\forall y \in S$ ，如果 $\forall x \in S$ 满足$x \prec y$ 时$P(x)$ 为真，那么 $P(y)$ 为真
+  *INDUCTIVE STEP:* $\forall y \in S$ ，如果 $\forall x \in S$ 满足$x \prec y$ 时$P(x)$ 为真，则 $P(y)$ 为真，那么$\forall x \in S \quad P(x) \text{is True}$
   
   这个结论很显然，因为对于最小元素$x_0$，没有比它小的，利用假设和空证明可以证明 $\forall x \prec x_0 \ P(x)$ 为真，那么最小元素 $P(x_0)$ 为真，那么所有都为真
 
@@ -342,7 +342,7 @@ graph LR
 #### Maximal and Minimal Elements(极大元和极小元)
 
 * 当不存在 $b \in S$ 使得 $a \prec b$ 则$a$ 为极大元(**maximal**)，同理，不存在 $b \in S$ $b \prec a$ $a$ 为极小元(**minimal**)，一个集合可以有多个极大、极小元
-* 偏序集中有一个元素大于每个其他元素，称为**最大元(greatest element)** 记作 $I$ 有时也被称为**单位元(unit element)** 同理有最小元(**least element**) 记作 $0$ 也被称为 **零元(zero element)**
+* 偏序集中有一个元素大于每个其他元素，称为**最大元(greatest element)** 记作 $I$ 有时也被称为**单位元(unit element)** 同理有最小元(**least element**) 记作 $0$ 也被称为 **零元(zero element)**   *都不一定存在*
 * 对于偏序集 $(S,\preceq)$ 的子集$A$，如果 $u \in S$ 满足 $\forall a \in A$ 有 $a \preceq u$ 称 $u$ 为$A$ 的一个上界(**upper bound**)，类似的也有下界(**lower bound**)
 * $x$ 是上界且小于$A$ 的任何其他上界，称其为最小上界(**least upper bound**)，同样，有最大下界(**greatest lower bound**)，分别记作 $\text{glb}(A)$ 和 $\text{lub}(A)$
 * 将 $\text{lub}(\{a,b\})$ 记作 $a \vee b$ 并称其为a、b的**并(join)**
@@ -449,6 +449,7 @@ graph LR
     * $a^1 = a $  $a^{n} = a^{n-1} *a$
     * $a^0 = e$ 如果S是幺半群
     * 如果m、n是非负整数那么 $a^m * a^n = a^{m+n}$
+
 #### Isomorphism and Homomorphism
 * 设 $(S,*)$ 和 $(T,*')$ 是两个半群，如果函数 $f:S\to T$  是 S到T 的一个一一对应，并且对S中所有的a、b有 $f(a*b) = f(a)*'f(b) $ 则称 $f:S\to T$ 是 $(S,*)$ 到 $(T,*')$ 的一个 **同构(isomorphism)**
 * 可以证明 $f^{-1}$ 是从 T到S的一个同构
@@ -654,7 +655,7 @@ $$
 $$
 并且由 $f_R(a) = aN $ 所定义的函数 $f_R:G\to G/R$ 是从G到G/R 的同态且满射，因此，常把 $G/R$ 写成 $G/N$
 
-* **定理**：设N是群G的一个正规子群，R是G上的下述关系：$aRb$当且仅当$a^{-1}b=N$。
+* **定理**：设N是群G的一个正规子群，R是G上的下述关系：$aRb$当且仅当$a^{-1}b \in N$。
 那么
   1. R是G上的同余关系。
   2. N是关于R的等价类$[e]$，其中e是G的单位元。
@@ -893,7 +894,7 @@ $$
 * 整数快速乘法  Fast Multiplication of Integers
   * $ab$ 是两个长度为 $2n$ 的二进制整数（可在前面补零使位数相等）则 $a = (a_{2n-1} \cdots a_0)_2 \quad b = (b_{2n-1} \cdots b_0)_2 $
   * 令 $a = 2^nA_1 + A_0 \quad b = 2^n B_1 + B_0$ 其中 $A_1 = (a_{2n-1} \cdots a_n)_2 \quad A_0 = (a_{n-1} \cdots a_0)$ 同样的可得到 $B_1 \ B_0$
-  * 有恒等式$$ab = (2^{2n} + 2^n)A_1B_1 + 2^n(A_1-A_0)(B_0-B_)1 + (2^n+1)A_0B_0 $$
+  * 有恒等式$$ab = (2^{2n} + 2^n)A_1B_1 + 2^n(A_1-A_0)(B_0-B_1) + (2^n+1)A_0B_0 $$
   * 上式表达了两个$2n$整数乘法可用3个$n$位整数的乘法加上加法、减法、移位实现
   * $f(n)$ 表示n位整数相乘所需要按位运算的总数，运算总数 $f(2n) = 3f(n)+C_n $
 
@@ -917,7 +918,7 @@ f(n) \left\{
 \begin{aligned}
   &O(n^d) \quad &a<b^d \\
   &O(n^d \log n) \quad &a=b^d \\
-  &O(n^{\log _b^a}) \quad a>b^d
+  &O(n^{\log _b a}) \quad &a>b^d
 \end{aligned}
 \right.
 $$
@@ -968,7 +969,7 @@ $$
 * 度为0，**孤立的  isolated**；度为1，**悬挂的  pendant**
 * 无向图有m个边，那么 $2m = \sum_{v\in V} \text{deg}(v) $
 * 无向图有偶数个度为奇数的顶点
-* 有向图，有$(u,v)$ 称u邻接到v  adjacent to；v从u邻接 adjacent from；u为**起点initial vertex**；v为**终点 terminal or en vertex**
+* 有向图，有$(u,v)$ 称u **邻接到v  adjacent to** ；v从u **邻接 adjacent from**；u为 **起点initial vertex** ；v为**终点 terminal or end vertex**
 * 入度  in-degree $\text{deg}^-$；出度 out-degree $\text{deg}^+$
 * 
 $$
@@ -1016,15 +1017,15 @@ $$
 ### Connectivity
 * **通路  path**：长度为经过边的个数
 * **回路  circuit**：哪开始哪结束，长度不为0
-* 若无向图中每一对不同的顶点之间都有通路，则该图称为**连通的  connected**。不连通的无向图称为**不连通的  not connected or disconnect**。当从图中删除顶点或边，或两者时，得到了不连通的子图，就称将图变成不连通的。
+* 若无向图中每一对不同的顶点之间都有通路，则该图称为 **连通的  connected**。不连通的无向图称为 **不连通的  not connected or disconnect**。当从图中删除顶点或边，或两者时，得到了不连通的子图，就称将图变成不连通的。
 * **连通分支  connected component**图G的连通分支是G的连通子图，且该子图不是图G的另一个连通子图的真子图。也就是说，图G的连通分支是G的一个极大连通子图。
-* 有时删除图中的一个顶点和它所关联的边，就产生比原图更多的连通分支的子图。把这样的顶点称为**割点（或关节点）  cut vertices (or articulation points)**。从连通图里删除割点，就产生不连通的子图。同理，如果删除一条边，就产生比原图更多连通分支的子图，这条边就称为**割边或桥  cut edge or bridge**。
-* 不含割点的连通图称为**不可分割图  nonseparable graphs**
-* 若$G-V'$是不连通的，则称$G=(V，E)$的顶点集$V$的子集$V'$是**点割集，或分割集  vertex cut, or separating set**。
-* 除了完全图以外，每一个连通图都有一个点割集。我们定义非完全图的**点连通度  vertex connectivity**为点割集中最小的顶点数，记作 $\kappa(G)$ 。
+* 有时删除图中的一个顶点和它所关联的边，就产生比原图更多的连通分支的子图。把这样的顶点称为 **割点（或关节点）  cut vertices (or articulation points)** 。从连通图里删除割点，就产生不连通的子图。同理，如果删除一条边，就产生比原图更多连通分支的子图，这条边就称为 **割边或桥  cut edge or bridge**。
+* 不含割点的连通图称为 **不可分割图  nonseparable graphs**
+* 若$G-V'$是不连通的，则称$G=(V，E)$的顶点集$V$的子集$V'$是 **点割集，或分割集  vertex cut, or separating set**。
+* 除了完全图以外，每一个连通图都有一个点割集。我们定义非完全图的 **点连通度  vertex connectivity**为点割集中最小的顶点数，记作 $\kappa(G)$ 。
 * 当G是完全图时，它没有点割集，因为删除它顶点集合的任意子集及其所有相关联的边后它仍然是一个完全图。同时，当G是完全图时，我们不能把$\kappa(G)$定义为点割集的最小顶点数。我们用$\kappa(G)=n-1$来替代，这是需要删除的顶点数，以便得到只含有一个顶点的图
-* $\kappa(G) \geq k$ 称图为**k连通的  k-connected (or k-vertex-connected)**
-* 若图是不可分割的且至少含有3个顶点，则称该图为**2连通  2-connected**的或**双连通的  biconnected**。
+* $\kappa(G) \geq k$ 称图为 **k连通的  k-connected (or k-vertex-connected)**
+* 若图是不可分割的且至少含有3个顶点，则称该图为 **2连通  2-connected** 的或 **双连通的  biconnected**。
 * **边割集  edge cut**。图G的**边连通度  edge connectivity**，记作$\lambda (G)$
 * 
 $$
